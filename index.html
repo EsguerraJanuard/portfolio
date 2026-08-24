@@ -21,7 +21,9 @@
             --gradient-text: linear-gradient(to right, #38bdf8, #818cf8, #2dd4bf);
             --card-bg: rgba(15, 23, 42, 0.45);
             --card-border: rgba(255, 255, 255, 0.08);
-            --hover-bg: rgba(30, 41, 59, 0.8);
+            --hover-bg: rgba(30, 41, 59, 0.7);
+            --hover-border: rgba(255, 255, 255, 0.15);
+            --hover-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
             --font-main: 'Inter', sans-serif;
             --font-mono: 'Fira Code', monospace;
             --border-radius-lg: 24px;
@@ -43,6 +45,8 @@
             --card-bg: rgba(255, 255, 255, 0.7);
             --card-border: rgba(0, 0, 0, 0.1);
             --hover-bg: rgba(255, 255, 255, 1);
+            --hover-border: rgba(56, 189, 248, 0.4);
+            --hover-shadow: 0 20px 40px -15px rgba(56, 189, 248, 0.25);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -302,7 +306,10 @@
             border-radius: var(--border-radius-lg); padding: 48px; transition: var(--transition-smooth);
             backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             display: flex; flex-direction: column; position: relative; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
         }
         /* Top border gradient reveal */
         .glass-card::before {
@@ -311,9 +318,9 @@
         }
         .glass-card:hover { 
             transform: translateY(-12px); 
-            border-color: rgba(255,255,255,0.15); 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5); 
-            background: rgba(30, 41, 59, 0.7);
+            border-color: var(--hover-border); 
+            box-shadow: var(--hover-shadow); 
+            background: var(--hover-bg);
         }
         .glass-card:hover::before { opacity: 1; }
 
@@ -348,7 +355,8 @@
         }
 
         /* Certificates adjustments */
-        .cert-card { padding: 32px; }
+        .cert-card { padding: 32px; cursor: default; }
+        .cert-card:hover { transform: translateY(-5px); } /* Override hover distance for certs */
         .cert-img-container { 
             width: 100%; height: 260px; border-radius: var(--border-radius-md); 
             margin-bottom: 30px; border: 1px solid var(--card-border); 
@@ -478,11 +486,11 @@
         </section>
 
         <section id="projects" class="reveal">
-            <h2>Featured <span class="gradient-text">Work</span></h2>
+            <h2>Engineering <span class="gradient-text">Architecture</span></h2>
             <div class="grid-layout">
                 
                 <!-- Project 1: RFinest -->
-                <div class="glass-card">
+                <a href="https://github.com/jaybyabut/rfinest-waterstation" target="_blank" rel="noopener noreferrer" class="glass-card">
                     <h3>RFinest Management System</h3>
                     <span class="role-tag">Full-Stack Integration</span>
                     <p>A production-deployed, full-stack management system built to automate daily operations, inventory, and order fulfillment for a commercial water refilling enterprise.</p>
@@ -497,10 +505,10 @@
                         <span class="tech-stack-chip"><i class="devicon-supabase-plain colored"></i> Supabase</span>
                         <span class="tech-stack-chip"><i class="devicon-postgresql-plain colored"></i> PostgreSQL</span>
                     </div>
-                </div>
+                </a>
 
                 <!-- Project 2: AST-Evaluated Python IDE -->
-                <div class="glass-card">
+                <a href="https://github.com/EsguerraJanuard/pamsu-python-ide" target="_blank" rel="noopener noreferrer" class="glass-card">
                     <h3>AST-Evaluated Python IDE</h3>
                     <span class="role-tag">Lead Architect & Developer</span>
                     <p>A robust, full-stack educational developer platform featuring real-time sandboxed code execution, AST-driven algorithmic evaluation, and asynchronous instructor monitoring.</p>
@@ -515,7 +523,7 @@
                         <span class="tech-stack-chip"><i class="devicon-python-plain colored"></i> Python AST</span>
                         <span class="tech-stack-chip"><i class="devicon-redis-plain colored"></i> Redis</span>
                     </div>
-                </div>
+                </a>
 
             </div>
         </section>
