@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Januard D. Esguerra | AI-Augmented Software Engineer</title>
-    <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="favicon.jpg">
-    
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
     
     <style>
         :root {
-            --bg-color: #020617; /* Even deeper, sleeker dark */
+            --bg-color: #020617;
             --bg-grid: rgba(255, 255, 255, 0.025);
             --nav-bg: rgba(2, 6, 23, 0.75);
             --text-main: #94a3b8;
@@ -69,6 +67,18 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            width: 0%;
+            background: var(--gradient-glow);
+            z-index: 1002;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+
         /* Animated Grid Background */
         body::before {
             content: "";
@@ -80,7 +90,6 @@
             background-size: 50px 50px;
             z-index: -2;
             pointer-events: none;
-            /* Subtle downward movement */
             animation: moveGrid 30s linear infinite;
         }
 
@@ -143,12 +152,12 @@
             color: var(--text-main); text-decoration: none; font-family: var(--font-mono);
             font-size: 0.85rem; font-weight: 500; transition: var(--transition-smooth); position: relative;
         }
-        .nav-links a:hover { color: var(--heading-color); }
+        .nav-links a:hover, .nav-links a.active { color: var(--heading-color); }
         .nav-links a::after {
             content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0;
             background: var(--gradient-text); transition: width 0.3s ease;
         }
-        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
         
         .theme-btn {
             background: var(--card-bg); border: 1px solid var(--card-border);
@@ -185,6 +194,17 @@
         section { padding: 140px 0; }
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Hero Entrance Animation */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-text .mono-subtitle { opacity: 0; animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+        .hero-text h1 { opacity: 0; animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards; }
+        .hero-text .description { opacity: 0; animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards; }
+        .hero-text .hero-actions { opacity: 0; animation: fadeSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards; }
+        .hero-image { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
 
         /* Hero Section */
         .hero {
@@ -267,7 +287,7 @@
         }
         @keyframes pulse { 0% { opacity: 0.2; transform: scale(0.95); } 100% { opacity: 0.5; transform: scale(1.05); } }
 
-        /* Highlight box for About */
+        /* About */
         .about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px; align-items: center; }
         .about-text p { font-size: 1.15rem; margin-bottom: 24px; color: var(--text-main); }
         .highlight-box {
@@ -303,7 +323,7 @@
             color: #fff;
         }
 
-        /* Glass Cards (Projects & Certs) */
+        /* Glass Cards */
         .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; }
         
         .glass-card {
@@ -316,47 +336,78 @@
             color: inherit;
             cursor: pointer;
         }
+
+        /* Card Stagger Animation */
+        .grid-layout .glass-card {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .glass-card.card-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* Top border gradient reveal */
         .glass-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
             background: var(--gradient-text); opacity: 0; transition: var(--transition-smooth);
         }
-        .glass-card:hover { 
+
+        /* Mouse-Follow Glow Effect (project cards only) */
+        .glass-card:not(.cert-card)::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(
+                600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(56, 189, 248, 0.07),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .glass-card:not(.cert-card):hover::after { opacity: 1; }
+
+        .glass-card.card-visible:hover { 
             transform: translateY(-12px); 
             border-color: var(--hover-border); 
             box-shadow: var(--hover-shadow); 
             background: var(--hover-bg);
         }
-        .glass-card:hover::before { opacity: 1; }
+        .glass-card.card-visible:hover::before { opacity: 1; }
 
         .glass-card h3 { color: var(--heading-color); font-size: 1.8rem; margin-bottom: 12px; letter-spacing: -0.02em; font-weight: 800; }
         
-        /* Subtle GitHub hint on cards */
+        /* GitHub Hint (Pill Style) */
         .card-link-hint {
             position: absolute;
-            top: 48px;
-            right: 48px;
+            top: 24px;
+            right: 24px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
+            gap: 8px;
             color: var(--text-muted);
-            opacity: 0.5;
+            opacity: 0.35;
             transition: var(--transition-smooth);
+            z-index: 2;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            border-radius: 100px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
         }
+        .card-link-hint .arrow-icon { transition: transform 0.3s ease; }
         .glass-card:hover .card-link-hint {
             opacity: 1;
             color: var(--accent-primary);
-            transform: translate(3px, -3px);
+            border-color: rgba(56, 189, 248, 0.25);
+            background: rgba(56, 189, 248, 0.08);
         }
-        
-        /* Adjust mobile positioning for hint */
-        @media (max-width: 768px) {
-            .card-link-hint {
-                top: 24px;
-                right: 24px;
-            }
+        .glass-card:hover .card-link-hint .arrow-icon {
+            transform: translate(2px, -2px);
         }
 
         .role-tag {
@@ -365,7 +416,7 @@
             border-radius: 100px; font-family: var(--font-mono);
             font-size: 0.85rem; margin-bottom: 24px; font-weight: 600;
             border: 1px solid rgba(56, 189, 248, 0.2);
-            align-self: flex-start; /* Keep tag from spanning full width if it wraps */
+            align-self: flex-start;
         }
         
         .glass-card > p { margin-bottom: 24px; font-size: 1.05rem; color: var(--text-main); font-weight: 400; line-height: 1.7; }
@@ -384,13 +435,14 @@
             padding: 8px 16px; border-radius: 8px; border: 1px solid var(--card-border);
             transition: all 0.3s ease;
         }
+        .light-mode .tech-stack-chip { background: rgba(0,0,0,0.05); }
         .glass-card:hover .tech-stack-chip {
             border-color: rgba(255,255,255,0.1);
         }
 
-        /* Certificates adjustments */
+        /* Certificates */
         .cert-card { padding: 32px; cursor: default; }
-        .cert-card:hover { transform: translateY(-5px); } /* Override hover distance for certs */
+        .cert-card.card-visible:hover { transform: translateY(-5px); }
         .cert-img-container { 
             width: 100%; height: 260px; border-radius: var(--border-radius-md); 
             margin-bottom: 30px; border: 1px solid var(--card-border); 
@@ -404,6 +456,17 @@
         }
         .cert-card:hover .cert-img-container img { transform: scale(1.05); filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4)); }
 
+        /* 3-column cert grid on large screens */
+        @media (min-width: 1100px) {
+            #certificates .grid-layout {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 28px;
+            }
+            #certificates .grid-layout .cert-card:last-child:nth-child(3n+1) {
+                grid-column: 2 / 3;
+            }
+        }
+
         /* Footer */
         footer { text-align: center; padding: 100px 0; border-top: 1px solid var(--card-border); margin-top: 80px; position: relative; }
         footer::before {
@@ -413,7 +476,40 @@
         footer h2 { margin-bottom: 24px; }
         footer p { max-width: 550px; margin: 0 auto 48px auto; font-size: 1.15rem; color: var(--text-muted); }
         
-        /* --- Responsive Design for Mobile / Tablets --- */
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--heading-color);
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-smooth);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .back-to-top:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+        }
+
+        /* --- Responsive Design --- */
         @media (max-width: 992px) {
             .hero { flex-direction: column-reverse; text-align: center; justify-content: center; padding: 60px 0; min-height: auto; gap: 40px; }
             .hero-text h1 { font-size: 3.5rem; }
@@ -425,7 +521,7 @@
         }
 
         @media (max-width: 768px) {
-            .hamburger { display: block; } /* Show hamburger */
+            .hamburger { display: block; }
             
             .nav-links { 
                 position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
@@ -450,6 +546,7 @@
             .cert-img-container { height: 200px; }
             footer { padding: 60px 0; margin-top: 40px; }
             footer p { font-size: 1rem; padding: 0 10px; }
+            .card-link-hint { top: 16px; right: 16px; padding: 5px 10px; font-size: 0.7rem; }
         }
 
         @media (max-width: 480px) {
@@ -463,6 +560,7 @@
     </style>
 </head>
 <body>
+    <div class="scroll-progress" id="scroll-progress"></div>
     <div class="ambient-glow"></div>
     <div class="ambient-glow-2"></div>
 
@@ -581,9 +679,11 @@
             <h2>Engineering <span class="gradient-text">Architecture</span></h2>
             <div class="grid-layout">
                 
-                <!-- Project 1: RFinest -->
                 <a href="https://github.com/jaybyabut/rfinest-waterstation" target="_blank" rel="noopener noreferrer" class="glass-card">
-                    <div class="card-link-hint">Code <i class="devicon-github-original"></i></div>
+                    <div class="card-link-hint">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </div>
                     <h3>RFinest Management System</h3>
                     <span class="role-tag">Full-Stack Architect</span>
                     <p>Spearheaded the end-to-end architecture and rapid deployment of a commercial management system, transforming manual operations into a fully digitized, automated workflow.</p>
@@ -600,9 +700,11 @@
                     </div>
                 </a>
 
-                <!-- Project 2: AST-Evaluated Python IDE -->
                 <a href="https://github.com/EsguerraJanuard/pamsu-python-ide" target="_blank" rel="noopener noreferrer" class="glass-card">
-                    <div class="card-link-hint">Code <i class="devicon-github-original"></i></div>
+                    <div class="card-link-hint">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </div>
                     <h3>AST-Evaluated Python IDE</h3>
                     <span class="role-tag">Lead Backend Architect</span>
                     <p>Architected a robust educational sandbox platform capable of real-time code execution and algorithmic evaluation, demonstrating mastery in complex backend orchestration.</p>
@@ -619,9 +721,11 @@
                     </div>
                 </a>
 
-                <!-- Project 3: SNS -->
                 <a href="https://github.com/EsguerraJanuard/sns-app" target="_blank" rel="noopener noreferrer" class="glass-card">
-                    <div class="card-link-hint">Code <i class="devicon-github-original"></i></div>
+                    <div class="card-link-hint">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </div>
                     <h3>SNS Financial Assistant</h3>
                     <span class="role-tag">Full-Stack Engineer</span>
                     <p>Designed and developed a bespoke, mobile-first Progressive Web App (PWA) to solve complex omni-wallet financial tracking for elderly users without traditional accounting jargon.</p>
@@ -638,9 +742,11 @@
                     </div>
                 </a>
 
-                <!-- Project 4: Personal Financial Ledger -->
                 <a href="https://github.com/EsguerraJanuard/jde-personal-financial-tracker-app" target="_blank" rel="noopener noreferrer" class="glass-card">
-                    <div class="card-link-hint">Code <i class="devicon-github-original"></i></div>
+                    <div class="card-link-hint">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </div>
                     <h3>Personal Financial Ledger</h3>
                     <span class="role-tag">Full-Stack Engineer</span>
                     <p>Architected a strict double-entry bookkeeping application designed to guarantee absolute mathematical accuracy across multiple physical wallets and virtual budget envelopes.</p>
@@ -657,9 +763,11 @@
                     </div>
                 </a>
 
-                <!-- Project 5: FBCC Web Platform -->
                 <a href="https://github.com/EsguerraJanuard/fbcc-website" target="_blank" rel="noopener noreferrer" class="glass-card">
-                    <div class="card-link-hint">Code <i class="devicon-github-original"></i></div>
+                    <div class="card-link-hint">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                        <svg class="arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                    </div>
                     <h3>First Baptist Church of Cabalantian Web Platform</h3>
                     <span class="role-tag">Full-Stack Architect</span>
                     <p>Engineered a modern, highly accessible web platform with robust content management to digitally transform church operations and expand community reach.</p>
@@ -761,56 +869,89 @@
         </footer>
     </div>
 
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
     <script>
         // Light/Dark Mode Toggle
         const toggleBtn = document.getElementById('theme-toggle');
         const body = document.body;
         const iconSvg = `<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>`;
         const iconMoon = `<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`;
-
-        toggleBtn.innerHTML = iconSvg; // default dark mode sun icon
-
+        toggleBtn.innerHTML = iconSvg;
         toggleBtn.addEventListener('click', () => {
             body.classList.toggle('light-mode');
-            if (body.classList.contains('light-mode')) {
-                toggleBtn.innerHTML = iconMoon;
-            } else {
-                toggleBtn.innerHTML = iconSvg;
-            }
+            toggleBtn.innerHTML = body.classList.contains('light-mode') ? iconMoon : iconSvg;
         });
 
-        // Hamburger Menu Logic
+        // Hamburger Menu
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const navLinks = document.getElementById('nav-links');
-        
-        hamburgerBtn.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-        });
-        
-        // Close mobile menu when a link is clicked
-        const navItems = document.querySelectorAll('.nav-links a');
-        navItems.forEach(item => {
+        hamburgerBtn.addEventListener('click', () => { navLinks.classList.toggle('open'); });
+        document.querySelectorAll('.nav-links a').forEach(item => {
             item.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    navLinks.classList.remove('open');
-                }
+                if (window.innerWidth <= 768) navLinks.classList.remove('open');
             });
         });
 
-        // Scroll Animation Observer
+        // Scroll Progress Bar
+        const scrollProgress = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            scrollProgress.style.width = `${(scrollTop / docHeight) * 100}%`;
+        });
+
+        // Back to Top Button
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 600);
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Nav Scroll Spy
+        const sections = document.querySelectorAll('section[id], footer[id]');
+        const navItems = document.querySelectorAll('.nav-links a[href^="#"]');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 200;
+                if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+            });
+            navItems.forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('href') === `#${current}`) a.classList.add('active');
+            });
+        });
+
+        // Scroll Reveal with Staggered Cards
         const reveals = document.querySelectorAll('.reveal');
         const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
-
         const revealOnScroll = new IntersectionObserver(function(entries, observer) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Stop observing once revealed
+                    const cards = entry.target.querySelectorAll('.glass-card');
+                    cards.forEach((card, i) => {
+                        setTimeout(() => { card.classList.add('card-visible'); }, i * 120);
+                    });
+                    observer.unobserve(entry.target);
                 }
             });
         }, revealOptions);
-
         reveals.forEach(reveal => { revealOnScroll.observe(reveal); });
+
+        // Mouse-Follow Glow on Project Cards
+        document.querySelectorAll('.glass-card:not(.cert-card)').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+        });
     </script>
 </body>
 </html>
